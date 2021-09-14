@@ -1,12 +1,16 @@
 package com.simple.restapi.controllers;
 
+import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,8 +21,21 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public Product save(@RequestBody Product product) {
-        return productService.save(product);
+    public ResponseEntity<?> save(@Valid @RequestBody Product product, Errors errors) {
+        ResponseMessage<Product> response = new ResponseMessage<>();
+
+        if (errors.hasErrors()){
+            for (ObjectError error : errors.getAllErrors()){
+                response.getMessages().add(error.getDefaultMessage());
+            }
+            response.setStatus(false);
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else {
+            response.setStatus(true);
+            response.setData(productService.save(product));
+            return ResponseEntity.ok(response);
+        }
     }
 
     @GetMapping
@@ -43,12 +60,23 @@ public class ProductController {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@RequestBody Product product) {
+    public ResponseEntity<?> update(@Valid @RequestBody Product product, Errors errors) {
+        ResponseMessage<Product> response = new ResponseMessage<>();
+
         if (product.getId() == null) {
-            return new ResponseEntity<>("Id_is_required_for_update", HttpStatus.BAD_REQUEST);
+            response.getMessages().add("Id is required for update");
+        }
+        if (errors.hasErrors() || response.getMessages().size() != 0){
+            for (ObjectError error : errors.getAllErrors()){
+                response.getMessages().add(error.getDefaultMessage());
+            }
+            response.setStatus(false);
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
-            save(product);
-            return ResponseEntity.ok(product);
+            response.setStatus(true);
+            response.setData(productService.save(product));
+            return ResponseEntity.ok(response);
         }
     }
 
