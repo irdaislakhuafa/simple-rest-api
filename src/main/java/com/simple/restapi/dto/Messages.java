@@ -9,5 +9,5 @@ import java.util.List;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class Messages {
-    private List<String> values = new ArrayList<>();
+    private List<String> messages = new ArrayList<>();
 }
