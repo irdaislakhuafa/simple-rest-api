@@ -8,6 +8,6 @@ import javax.validation.constraints.NotEmpty;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class SupplierDtoFull extends SupplierDto {
-    @NotEmpty(message = "Id is required for update")
+//    @NotEmpty(message = "Id is required for update")
     private Long id;
 }

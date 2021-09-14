@@ -1,8 +1,12 @@
 package com.simple.restapi.controllers;
 
+import com.simple.restapi.dto.Messages;
 import com.simple.restapi.dto.ResponseMessage;
+import com.simple.restapi.dto.entities.SupplierDtoFull;
 import com.simple.restapi.model.entities.Product;
+import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.ProductService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +23,9 @@ import java.util.NoSuchElementException;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody Product product, Errors errors) {
@@ -93,6 +100,36 @@ public class ProductController {
         } else {
             productService.removeById(id);
             return new ResponseEntity<>("success", HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors , @PathVariable("id") Long productId) {
+        ResponseMessage<Supplier> response = new ResponseMessage<>();
+        Messages messages = new Messages();
+
+//        if (supplierDtoFull.getId() == null)
+        if (errors.hasErrors()){
+            for (ObjectError error : errors.getAllErrors()) {
+                response.getMessages().add(error.getDefaultMessage());
+            }
+            response.setStatus(false);
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                productService.findById(productId);
+            } catch (NoSuchElementException e){
+                messages.getMessages().add("Data with ID: " + productId + " not found");
+                return new ResponseEntity<>(messages, HttpStatus.NOT_FOUND);
+            } catch (Exception e){
+                return new ResponseEntity<>("something_wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            Supplier supplier = modelMapper.map(supplierDtoFull, Supplier.class);
+            productService.addSupplier(supplier, productId);
+            response.setStatus(true);
+            response.setData(supplier);
+            return ResponseEntity.ok(response);
         }
     }
 }
