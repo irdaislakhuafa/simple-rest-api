@@ -6,6 +6,7 @@ import com.simple.restapi.dto.entities.SupplierDto;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
 import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.SupplierService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ import java.util.NoSuchElementException;
 public class SupplierController {
     @Autowired
     private SupplierService supplierService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping
     public Iterable<Supplier> findAll() {
