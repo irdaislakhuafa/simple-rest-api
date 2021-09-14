@@ -43,13 +43,9 @@ public class SupplierController {
             response.setData(null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
+            Supplier supplier = modelMapper.map(supplierDto, Supplier.class);
+
             response.setStatus(true);
-
-            Supplier supplier = new Supplier();
-            supplier.setName(supplierDto.getName());
-            supplier.setEmail(supplierDto.getEmail());
-            supplier.setAddress(supplierDto.getAddress());
-
             response.setData(supplierService.save(supplier));
             return ResponseEntity.ok(response);
         }
@@ -85,14 +81,9 @@ public class SupplierController {
             response.setData(null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
+            Supplier supplier = modelMapper.map(supplierDtoFull, Supplier.class);
+
             response.setStatus(true);
-
-            Supplier supplier = new Supplier();
-            supplier.setId(supplierDtoFull.getId());
-            supplier.setName(supplierDtoFull.getName());
-            supplier.setEmail(supplierDtoFull.getEmail());
-            supplier.setAddress(supplierDtoFull.getAddress());
-
             response.setData(supplierService.save(supplier));
             return ResponseEntity.ok(response);
         }
