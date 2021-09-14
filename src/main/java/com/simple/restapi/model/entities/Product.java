@@ -19,8 +19,7 @@ public class Product implements Serializable {
     @Column(length = 100, nullable = false)
     private String name;
 
-    @NotEmpty(message = "Descriptioin is required")
-    @Column(length = 1000) 
+    @Column(length = 1000)
     private String description;
 
     private double price;

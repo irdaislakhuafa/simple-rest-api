@@ -19,7 +19,6 @@ public class Supplier implements Serializable {
     private String name;
 
     @Column(length = 100, nullable = false)
-    @Email(message = "Email is not valid")
     private String email;
 
     @Column(nullable = false)
