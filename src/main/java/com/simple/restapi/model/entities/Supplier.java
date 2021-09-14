@@ -6,11 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity @Table(name = "suppliers")
 @Data @NoArgsConstructor @AllArgsConstructor
-public class Supplier {
+public class Supplier implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
