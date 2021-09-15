@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class ProductDto {
@@ -15,8 +16,11 @@ public class ProductDto {
     @NotEmpty(message = "Description is required")
     private String description;
 
-    @NotEmpty(message = "Price is required")
-    private double price;
+    @NotNull(message = "Price is required")
+    private Double price;
 
     private Category category;
+
+//    @NotBlank/@NotEmpty only for String field only
+//    use @NotNull for integer/decimal
 }

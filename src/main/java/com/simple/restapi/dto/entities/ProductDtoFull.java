@@ -4,10 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-@Data @NoArgsConstructor @AllArgsConstructor
-public class ProductDtoFull extends ProductDto{
-    @NotEmpty(message = "Id is required for update")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductDtoFull extends ProductDto {
+    @NotNull(message = "Id is required for update")
     private Long id;
 }
