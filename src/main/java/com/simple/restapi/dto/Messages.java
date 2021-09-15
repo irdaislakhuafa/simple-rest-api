@@ -21,7 +21,7 @@ public class Messages {
         this.messages.add("Unknown error, please contact admin");
         return new ResponseEntity<>(this.messages, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    public ResponseEntity<?> succes(){
+    public ResponseEntity<?> success(){
         this.messages.add("Success");
         return ResponseEntity.ok(this.messages);
     }

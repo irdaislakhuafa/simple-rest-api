@@ -3,6 +3,7 @@ package com.simple.restapi.controllers;
 import com.simple.restapi.dto.Messages;
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.ProductDto;
+import com.simple.restapi.dto.entities.ProductDtoFull;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.model.entities.Supplier;
@@ -58,24 +59,18 @@ public class ProductController {
         try {
             product = productService.findById(id);
         } catch (NoSuchElementException e){
-            product = null;
+            return new Messages().idNotFound(id);
+        } catch (Exception e){
+            return new Messages().uknownError();
         }
-
-        if (product == null) {
-            return new ResponseEntity<>("data_not_found", HttpStatus.NOT_FOUND);
-        } else {
-            return ResponseEntity.ok(product);
-        }
+        return ResponseEntity.ok(product);
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody Product product, Errors errors) {
+    public ResponseEntity<?> update(@Valid @RequestBody ProductDtoFull productDtoFull, Errors errors) {
         ResponseMessage<Product> response = new ResponseMessage<>();
 
-        if (product.getId() == null) {
-            response.getMessages().add("Id is required for update");
-        }
-        if (errors.hasErrors() || response.getMessages().size() != 0){
+        if (errors.hasErrors()){
             for (ObjectError error : errors.getAllErrors()){
                 response.getMessages().add(error.getDefaultMessage());
             }
@@ -83,6 +78,7 @@ public class ProductController {
             response.setData(null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
+            Product product = modelMapper.map(productDtoFull, Product.class);
             response.setStatus(true);
             response.setData(productService.save(product));
             return ResponseEntity.ok(response);
@@ -95,14 +91,12 @@ public class ProductController {
         try {
             product = productService.findById(id);
         } catch (NoSuchElementException e){
-            product = null;
-        }
-        if (product == null) {
             return new Messages().idNotFound(id);
-        } else {
-            productService.removeById(id);
-            return new Messages().succes();
+        } catch (Exception e){
+            return new Messages().uknownError();
         }
+        productService.removeById(id);
+        return new Messages().success();
     }
 
     @PutMapping("/{id}")
