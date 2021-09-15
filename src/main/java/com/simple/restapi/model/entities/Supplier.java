@@ -29,6 +29,5 @@ public class Supplier implements Serializable {
     private String address;
 
     @ManyToMany(mappedBy = "suppliers")
-    @JsonBackReference
     private List<Product> products;
 }
