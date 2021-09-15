@@ -58,23 +58,23 @@ public class CategoyController {
         try {
             category = categoryService.findById(id);
         } catch (NoSuchElementException e){
-            messages.getMessages().add("Data with ID: " +  id + " not found");
-            return new ResponseEntity<>(messages, HttpStatus.NOT_FOUND);
+            return messages.idNotFound(id);
         } catch (Exception e){
-            return new ResponseEntity<>("something_wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+            return messages.uknownError();
         }
         return ResponseEntity.ok(category);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeById(@PathVariable("id") Long id){
         Category category;
+        Messages messages = new Messages();
 
         try {
             categoryService.removeById(id);
         } catch (NoSuchElementException e){
-            return new ResponseEntity<>("data_not_found", HttpStatus.NOT_FOUND);
+            return messages.idNotFound(id);
         } catch (Exception e){
-            return new ResponseEntity<>("something_wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+            return messages.uknownError();
         }
         return ResponseEntity.ok("success");
     }

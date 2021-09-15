@@ -96,10 +96,10 @@ public class ProductController {
             product = null;
         }
         if (product == null) {
-            return new ResponseEntity<>("data_not_found", HttpStatus.NOT_FOUND);
+            return new Messages().idNotFound(id);
         } else {
             productService.removeById(id);
-            return new ResponseEntity<>("success", HttpStatus.OK);
+            return new Messages().succes();
         }
     }
 
@@ -108,7 +108,6 @@ public class ProductController {
         ResponseMessage<Supplier> response = new ResponseMessage<>();
         Messages messages = new Messages();
 
-//        if (supplierDtoFull.getId() == null)
         if (errors.hasErrors()){
             for (ObjectError error : errors.getAllErrors()) {
                 response.getMessages().add(error.getDefaultMessage());
@@ -120,10 +119,9 @@ public class ProductController {
             try {
                 productService.findById(productId);
             } catch (NoSuchElementException e){
-                messages.getMessages().add("Data with ID: " + productId + " not found");
-                return new ResponseEntity<>(messages, HttpStatus.NOT_FOUND);
+                return messages.idNotFound(productId);
             } catch (Exception e){
-                return new ResponseEntity<>("something_wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+                return messages.uknownError();
             }
             Supplier supplier = modelMapper.map(supplierDtoFull, Supplier.class);
             productService.addSupplier(supplier, productId);
