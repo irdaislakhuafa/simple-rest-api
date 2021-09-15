@@ -5,6 +5,8 @@ import com.simple.restapi.model.entities.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SupplierService {
     @Autowired
@@ -24,5 +26,24 @@ public class SupplierService {
 
     public Iterable<Supplier> findAll() {
         return supplierDao.findAll();
+    }
+
+    public List<Supplier> findByName(String name, String sortType) {
+        if (sortType.contains("desc")) {
+            return supplierDao.findByNameContainsOrderByIdDesc(name);
+        } else {
+            return supplierDao.findByNameContainsOrderByIdAsc(name);
+        }
+    }
+
+    public Supplier findByEmail(String email) {
+        return supplierDao.findByEmail(email);
+    }
+
+    public List<?> findByNameStartsWith(String name) {
+        return supplierDao.findByNameStartingWith(name);
+    }
+    public List<?> findByNameOrEmail(String name, String email){
+        return supplierDao.findByNameContainsOrEmailContains(name, email);
     }
 }

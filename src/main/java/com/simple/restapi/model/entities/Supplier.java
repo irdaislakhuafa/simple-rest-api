@@ -22,7 +22,7 @@ public class Supplier implements Serializable {
     @Column(length = 100, nullable = false)
     private String name;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

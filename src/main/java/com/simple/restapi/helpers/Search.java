@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Search {
     private String keyword;
+    private String secondKeyword;
+    private String sortType;
 }

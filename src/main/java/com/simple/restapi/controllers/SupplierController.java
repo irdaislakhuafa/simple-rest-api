@@ -1,9 +1,10 @@
 package com.simple.restapi.controllers;
 
-import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.SupplierDto;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
+import com.simple.restapi.helpers.Messages;
+import com.simple.restapi.helpers.Search;
 import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.SupplierService;
 import org.modelmapper.ModelMapper;
@@ -100,5 +101,23 @@ public class SupplierController {
             return new ResponseEntity<>(messages, HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok("success");
+    }
+
+    @PostMapping("/search/name_contains")
+    public ResponseEntity<?> findByName(@RequestBody Search search) {
+        return ResponseEntity.ok(supplierService.findByName(search.getKeyword(), search.getSortType()));
+    }
+
+    @PostMapping("/search/email")
+    public ResponseEntity<?> findByEmail(@RequestBody Search search) {
+        return ResponseEntity.ok(supplierService.findByEmail(search.getKeyword()));
+    }
+    @PostMapping("/search/name_starting")
+    public ResponseEntity<?> findByNameStartsWith(@RequestBody Search search) {
+        return ResponseEntity.ok(supplierService.findByNameStartsWith(search.getKeyword()));
+    }
+    @PostMapping("/search/name_or_email")
+    public ResponseEntity<?> findByNameOrEmail(@RequestBody Search search) {
+        return ResponseEntity.ok(supplierService.findByNameOrEmail(search.getKeyword(), search.getSecondKeyword()));
     }
 }
