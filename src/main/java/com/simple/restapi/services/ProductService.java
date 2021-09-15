@@ -88,4 +88,9 @@ public class ProductService {
         return ResponseEntity.ok(products);
     }
 
+    public void setCategory(Category category, Long productId) throws Exception{
+        Product product = findById(productId);
+        product.setCategory(category);
+        save(product);
+    }
 }

@@ -6,11 +6,13 @@ import com.simple.restapi.dto.entities.ProductDtoFull;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
 import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.helpers.Search;
+import com.simple.restapi.model.entities.Category;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.ProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -125,6 +127,23 @@ public class ProductController {
             response.setData(supplier);
             return ResponseEntity.ok(response);
         }
+    }
+
+    @PutMapping("/set/category/{productId}")
+    public ResponseEntity<?> setCategory(@RequestBody Category category, @PathVariable Long productId) {
+        Messages messages = new Messages();
+        try {
+            productService.setCategory(category, productId);
+        } catch (NoSuchElementException e) {
+            return messages.idNotFound("Product", productId);
+        } catch (DataIntegrityViolationException e){
+            return messages.idNotFound("Category", category.getId());
+        } catch (Exception e){
+            e.printStackTrace();
+            return messages.uknownError();
+        }
+        messages.getMessages().add("success");
+        return ResponseEntity.ok(messages);
     }
 
     @PostMapping("/search/name")
