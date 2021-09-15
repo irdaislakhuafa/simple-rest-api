@@ -1,6 +1,6 @@
 package com.simple.restapi.controllers;
 
-import com.simple.restapi.dto.Messages;
+import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.SupplierDto;
 import com.simple.restapi.dto.entities.SupplierDtoFull;

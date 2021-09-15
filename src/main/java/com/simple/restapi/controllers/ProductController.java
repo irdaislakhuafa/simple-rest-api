@@ -1,10 +1,11 @@
 package com.simple.restapi.controllers;
 
-import com.simple.restapi.dto.Messages;
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.ProductDto;
 import com.simple.restapi.dto.entities.ProductDtoFull;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
+import com.simple.restapi.helpers.Messages;
+import com.simple.restapi.helpers.Search;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.ProductService;
@@ -17,7 +18,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -33,8 +33,8 @@ public class ProductController {
     public ResponseEntity<?> save(@Valid @RequestBody ProductDto productDto, Errors errors) {
         ResponseMessage<Product> response = new ResponseMessage<>();
 
-        if (errors.hasErrors()){
-            for (ObjectError error : errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 response.getMessages().add(error.getDefaultMessage());
             }
             response.setStatus(false);
@@ -49,7 +49,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> findAll() {
+    public Iterable<Product> findAll() {
         return productService.findAll();
     }
 
@@ -58,9 +58,9 @@ public class ProductController {
         Product product;
         try {
             product = productService.findById(id);
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return new Messages().idNotFound(id);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new Messages().uknownError();
         }
         return ResponseEntity.ok(product);
@@ -70,8 +70,8 @@ public class ProductController {
     public ResponseEntity<?> update(@Valid @RequestBody ProductDtoFull productDtoFull, Errors errors) {
         ResponseMessage<Product> response = new ResponseMessage<>();
 
-        if (errors.hasErrors()){
-            for (ObjectError error : errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 response.getMessages().add(error.getDefaultMessage());
             }
             response.setStatus(false);
@@ -90,9 +90,9 @@ public class ProductController {
         Product product;
         try {
             product = productService.findById(id);
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return new Messages().idNotFound(id);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new Messages().uknownError();
         }
         productService.removeById(id);
@@ -100,11 +100,11 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors , @PathVariable("id") Long productId) {
+    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors, @PathVariable("id") Long productId) {
         ResponseMessage<Supplier> response = new ResponseMessage<>();
         Messages messages = new Messages();
 
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 response.getMessages().add(error.getDefaultMessage());
             }
@@ -114,9 +114,9 @@ public class ProductController {
         } else {
             try {
                 productService.findById(productId);
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 return messages.idNotFound(productId);
-            } catch (Exception e){
+            } catch (Exception e) {
                 return messages.uknownError();
             }
             Supplier supplier = modelMapper.map(supplierDtoFull, Supplier.class);
@@ -126,4 +126,43 @@ public class ProductController {
             return ResponseEntity.ok(response);
         }
     }
+
+    @PostMapping("/search/name")
+    public ResponseEntity<?> findByName(@RequestBody Search search) {
+        return productService.findProductsByName(search.getKeyword());
+    }
+
+    @PostMapping("/search/name/like")
+    public ResponseEntity<?> findByNameLike(@RequestBody Search search) {
+        return productService.findProductsByNameLike(search.getKeyword());
+    }
+
+    @GetMapping("/search/category/{id}")
+    public ResponseEntity<?> findByCategoryId(@PathVariable("id") Long id) {
+        ResponseEntity<?> response;
+
+        try {
+            response = productService.findProductsByCategory(id);
+        } catch (NoSuchElementException e) {
+            return new Messages().idNotFound(id);
+        } catch (Exception e) {
+            return new Messages().uknownError();
+        }
+        return response;
+    }
+
+    @GetMapping("/search/supplier/{id}")
+    public ResponseEntity<?> findBySupplier(@PathVariable("id") Long id) {
+        ResponseEntity<?> response = productService.findProductsBySupplier(id);
+        try {
+            response = productService.findProductsBySupplier(id);
+        } catch (NoSuchElementException e) {
+            return new Messages().idNotFound("Supplier", id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Messages().uknownError();
+        }
+        return response;
+    }
+
 }
