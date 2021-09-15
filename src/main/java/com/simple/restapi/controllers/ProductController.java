@@ -2,6 +2,7 @@ package com.simple.restapi.controllers;
 
 import com.simple.restapi.dto.Messages;
 import com.simple.restapi.dto.ResponseMessage;
+import com.simple.restapi.dto.entities.ProductDto;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.model.entities.Supplier;
@@ -28,7 +29,7 @@ public class ProductController {
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<?> save(@Valid @RequestBody Product product, Errors errors) {
+    public ResponseEntity<?> save(@Valid @RequestBody ProductDto productDto, Errors errors) {
         ResponseMessage<Product> response = new ResponseMessage<>();
 
         if (errors.hasErrors()){
@@ -39,6 +40,7 @@ public class ProductController {
             response.setData(null);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
+            Product product = modelMapper.map(productDto, Product.class);
             response.setStatus(true);
             response.setData(productService.save(product));
             return ResponseEntity.ok(response);
