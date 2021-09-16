@@ -1,12 +1,16 @@
 package com.simple.restapi.controllers;
 
-import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.CategoryDto;
+import com.simple.restapi.helpers.Messages;
+import com.simple.restapi.helpers.Search;
 import com.simple.restapi.model.entities.Category;
 import com.simple.restapi.services.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -29,7 +33,7 @@ public class CategoyController {
     public ResponseEntity<?> save(@Valid @RequestBody CategoryDto categoryDto, Errors errors) {
         ResponseMessage<Category> response = new ResponseMessage<>();
 
-        if (errors.hasErrors()){
+        if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
                 response.getMessages().add(error.getDefaultMessage());
             }
@@ -57,25 +61,46 @@ public class CategoyController {
 
         try {
             category = categoryService.findById(id);
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return messages.idNotFound(id);
-        } catch (Exception e){
+        } catch (Exception e) {
             return messages.uknownError();
         }
         return ResponseEntity.ok(category);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeById(@PathVariable("id") Long id){
+    public ResponseEntity<?> removeById(@PathVariable("id") Long id) {
         Category category;
         Messages messages = new Messages();
 
         try {
             categoryService.removeById(id);
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return messages.idNotFound(id);
-        } catch (Exception e){
+        } catch (Exception e) {
             return messages.uknownError();
         }
         return ResponseEntity.ok("success");
+    }
+
+    @PostMapping("/search/with_paging")
+    public ResponseEntity<?> findByNameContains(@RequestBody Search search) {
+        Pageable pageable;
+
+        if (search.getSort().getSortOrder().contains("desc")) {
+            pageable = PageRequest.of(
+                    search.getRequestData().getPage(),
+                    search.getRequestData().getSize(),
+                    Sort.by(search.getSort().getSortBy()).descending()
+            );
+        } else {
+            pageable = PageRequest.of(
+                    search.getRequestData().getPage(),
+                    search.getRequestData().getSize(),
+                    Sort.by(search.getSort().getSortBy()).ascending()
+            );
+        }
+        return ResponseEntity.ok(categoryService.findByNameContains(search.getKeyword(), pageable));
     }
 }

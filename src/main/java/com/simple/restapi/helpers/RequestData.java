@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestData {
-    private int amount;
+    private int size;
     private int page;
 }

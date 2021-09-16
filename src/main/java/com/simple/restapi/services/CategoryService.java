@@ -3,7 +3,10 @@ package com.simple.restapi.services;
 import com.simple.restapi.model.dao.CategoryDao;
 import com.simple.restapi.model.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -24,5 +27,9 @@ public class CategoryService {
 
     public Iterable<Category> findAll() {
         return categoryDao.findAll();
+    }
+
+    public Iterable<Category> findByNameContains(String name, Pageable pageable) {
+        return categoryDao.findByNameContains(name, pageable);
     }
 }
