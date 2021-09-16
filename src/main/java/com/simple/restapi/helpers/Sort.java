@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Search {
-    private String keyword;
-    private String secondKeyword;
-    private Sort sort;
+public class Sort {
+    private String sortBy;
+    private String sortOrder;
 }

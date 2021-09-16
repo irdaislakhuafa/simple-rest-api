@@ -105,7 +105,7 @@ public class SupplierController {
 
     @PostMapping("/search/name_contains")
     public ResponseEntity<?> findByName(@RequestBody Search search) {
-        return ResponseEntity.ok(supplierService.findByName(search.getKeyword(), search.getSortType()));
+        return ResponseEntity.ok(supplierService.findByName(search.getKeyword(), search.getSort().getSortOrder()));
     }
 
     @PostMapping("/search/email")
