@@ -43,7 +43,8 @@ public class SupplierService {
     public List<?> findByNameStartsWith(String name) {
         return supplierDao.findByNameStartingWith(name);
     }
-    public List<?> findByNameOrEmail(String name, String email){
+
+    public List<?> findByNameOrEmail(String name, String email) {
         return supplierDao.findByNameContainsOrEmailContains(name, email);
     }
 }

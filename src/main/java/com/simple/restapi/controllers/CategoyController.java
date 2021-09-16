@@ -18,6 +18,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -102,5 +103,13 @@ public class CategoyController {
             );
         }
         return ResponseEntity.ok(categoryService.findByNameContains(search.getKeyword(), pageable));
+    }
+
+    @PostMapping("/saveall")
+    public ResponseEntity<?> saveAll(@RequestBody List<Category> categoryList){
+        ResponseMessage<Iterable<Category>> response = new ResponseMessage<>();
+        response.setStatus(true);
+        response.setData(categoryService.saveAll(categoryList));
+        return ResponseEntity.ok(response);
     }
 }

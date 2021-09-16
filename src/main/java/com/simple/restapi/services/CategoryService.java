@@ -32,4 +32,8 @@ public class CategoryService {
     public Iterable<Category> findByNameContains(String name, Pageable pageable) {
         return categoryDao.findByNameContains(name, pageable);
     }
+
+    public Iterable<Category> saveAll(List<Category> categories) {
+        return categoryDao.saveAll(categories);
+    }
 }
