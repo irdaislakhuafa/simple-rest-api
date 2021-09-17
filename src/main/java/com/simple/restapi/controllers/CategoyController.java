@@ -2,6 +2,7 @@ package com.simple.restapi.controllers;
 
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.CategoryDto;
+import com.simple.restapi.dto.entities.CategoryDtoFull;
 import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.helpers.Search;
 import com.simple.restapi.model.entities.Category;
@@ -111,5 +112,24 @@ public class CategoyController {
         response.setStatus(true);
         response.setData(categoryService.saveAll(categoryList));
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> update(@Valid @RequestBody CategoryDtoFull categoryDtoFull, Errors errors){
+        ResponseMessage<Category> response = new ResponseMessage<>();
+
+        if (errors.hasErrors()){
+            for (ObjectError error : errors.getAllErrors()){
+                response.getMessages().add(error.getDefaultMessage());
+            }
+            response.setStatus(false);
+            response.setData(null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else {
+            Category category = modelMapper.map(categoryDtoFull, Category.class);
+            response.setStatus(true);
+            response.setData(categoryService.save(category));
+            return ResponseEntity.ok(response);
+        }
     }
 }
