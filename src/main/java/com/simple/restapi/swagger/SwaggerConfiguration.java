@@ -24,7 +24,7 @@ public class SwaggerConfiguration {
     public Docket apiDocs() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("com.simple.restapi.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(new ApiInfo(
