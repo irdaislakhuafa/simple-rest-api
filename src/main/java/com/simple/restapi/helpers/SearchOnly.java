@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Search extends SearchOnly{
-    private String secondKeyword;
-    private RequestData requestData;
-    private Sort sort;
+public class SearchOnly {
+    private String keyword;
 }
