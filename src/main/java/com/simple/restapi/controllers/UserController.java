@@ -30,13 +30,9 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
-//    @GetMapping
-//    public ResponseEntity<?> findAll() {
-//        return ResponseEntity.ok(userService.findAll());
-//    }
     @GetMapping
-    public Iterable<?> findAll() {
-        return userService.findAll();
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @PostMapping("/register")
