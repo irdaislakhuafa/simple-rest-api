@@ -5,6 +5,7 @@ import com.simple.restapi.dto.entities.UserDto;
 import com.simple.restapi.helpers.Search;
 import com.simple.restapi.helpers.SearchOnly;
 import com.simple.restapi.model.entities.User;
+import com.simple.restapi.model.entities.utils.AccessLevel;
 import com.simple.restapi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class UserController {
         ResponseMessage<User> response = new ResponseMessage<>();
         userDto.setAccessLevel(userDto.getAccessLevel().toUpperCase());
         User user = modelMapper.map(userDto, User.class);
+//        User user = new User();
+//        user.setUserFullName(userDto.getUserFullName());
+//        user.setEmail(userDto.getEmail());
+//        user.setPassword(userDto.getPassword());
+//        user.setAccessLevel(AccessLevel.valueOf(userDto.getAccessLevel().toUpperCase()));
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {

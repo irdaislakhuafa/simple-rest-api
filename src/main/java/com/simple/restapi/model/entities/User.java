@@ -32,13 +32,13 @@ public class User implements UserDetails {
     @Column(length = 100, nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private AccessLevel accessLevel;
 
-    @Override
+    @Override @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(accessLevel.name());
-        return Collections.singletonList(authority);
+        return Collections.singleton(authority);
     }
 
     @Override
