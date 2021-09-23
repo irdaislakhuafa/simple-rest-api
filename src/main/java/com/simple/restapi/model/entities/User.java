@@ -35,7 +35,7 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private AccessLevel accessLevel;
 
-    @Override @JsonIgnore
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(accessLevel.name());
         return Collections.singleton(authority);

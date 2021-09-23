@@ -44,11 +44,6 @@ public class UserController {
         ResponseMessage<User> response = new ResponseMessage<>();
         userDto.setAccessLevel(userDto.getAccessLevel().toUpperCase());
         User user = modelMapper.map(userDto, User.class);
-//        User user = new User();
-//        user.setUserFullName(userDto.getUserFullName());
-//        user.setEmail(userDto.getEmail());
-//        user.setPassword(userDto.getPassword());
-//        user.setAccessLevel(AccessLevel.valueOf(userDto.getAccessLevel().toUpperCase()));
 
         if (errors.hasErrors()) {
             for (ObjectError error : errors.getAllErrors()) {
