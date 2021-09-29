@@ -20,7 +20,6 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Name is required")
     @Column(length = 100, nullable = false)
     private String name;
 
