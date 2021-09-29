@@ -83,7 +83,18 @@ public class SupplierController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
             Supplier supplier = modelMapper.map(supplierDtoFull, Supplier.class);
-
+            Supplier tempSupplier = null;
+            try {
+                tempSupplier = supplierService.findById(supplierDtoFull.getId());
+            } catch (NoSuchElementException e){
+                return new Messages().idNotFound(supplierDtoFull.getId(), response);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            if (tempSupplier != null){
+                supplier.setCreatedBy(tempSupplier.getCreatedBy());
+                supplier.setCreatedDate(tempSupplier.getCreatedDate());
+            }
             response.setStatus(true);
             response.setData(supplierService.save(supplier));
             return ResponseEntity.ok(response);
