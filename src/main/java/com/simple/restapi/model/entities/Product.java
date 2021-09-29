@@ -1,6 +1,7 @@
 package com.simple.restapi.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.simple.restapi.model.entities.utils.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product implements Serializable {
+public class Product extends BaseEntity<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

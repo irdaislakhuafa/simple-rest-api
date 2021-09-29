@@ -130,6 +130,8 @@ public class CategoyController {
             Category tempCategory = null;
             try {
                 tempCategory = categoryService.findById(categoryDtoFull.getId());
+            } catch (NoSuchElementException e){
+                return new Messages().idNotFound(categoryDtoFull.getId(), response);
             } catch (Exception e) {
                 e.printStackTrace();
             }

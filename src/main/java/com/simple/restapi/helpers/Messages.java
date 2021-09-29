@@ -1,5 +1,6 @@
 package com.simple.restapi.helpers;
 
+import com.simple.restapi.dto.ResponseMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,15 @@ public class Messages {
         return new ResponseEntity<>(this, HttpStatus.NOT_FOUND);
     }
 
-    public ResponseEntity<?> idNotFound(String field,  Long id) {
-        this.messages.add("Data "+ field + " with ID: " + id + " not found");
+    public ResponseEntity<?> idNotFound(Long id, ResponseMessage<?> response) {
+
+        response.getMessages().add("Data with ID: " + id + " not found");
+        response.setStatus(false);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<?> idNotFound(String field, Long id) {
+        this.messages.add("Data " + field + " with ID: " + id + " not found");
         return new ResponseEntity<>(this, HttpStatus.NOT_FOUND);
     }
 

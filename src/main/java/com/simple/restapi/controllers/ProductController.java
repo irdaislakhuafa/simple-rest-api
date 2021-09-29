@@ -81,6 +81,19 @@ public class ProductController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
             Product product = modelMapper.map(productDtoFull, Product.class);
+            Product tempProduct = null;
+            try {
+                tempProduct = productService.findById(productDtoFull.getId());
+            } catch (NoSuchElementException e){
+                return new Messages().idNotFound(productDtoFull.getId(), response);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            if (tempProduct != null){
+                product.setCreatedBy(tempProduct.getCreatedBy());
+                product.setCreatedDate(tempProduct.getCreatedDate());
+            }
+
             response.setStatus(true);
             response.setData(productService.save(product));
             return ResponseEntity.ok(response);
