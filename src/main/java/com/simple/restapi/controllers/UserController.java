@@ -12,6 +12,7 @@ import com.simple.restapi.model.entities.utils.AccessLevel;
 import com.simple.restapi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -99,9 +100,15 @@ public class UserController {
                 user.setPassword(userDtoFull.getPassword());
             }
 
+            try {
+                user = userService.register(user);
+            } catch (DataIntegrityViolationException e){
+                response.getMessages().add("Other user with email " + userDtoFull.getEmail() + " already exists");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
             response.setStatus(true);
             response.getMessages().add("Saved success!");
-            response.setData(userService.register(user));
+            response.setData(user);
             return ResponseEntity.ok(response);
         }
     }
