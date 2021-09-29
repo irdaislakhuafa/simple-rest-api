@@ -2,6 +2,9 @@ package com.simple.restapi.controllers;
 
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.UserDto;
+import com.simple.restapi.dto.entities.UserDtoFull;
+import com.simple.restapi.dto.entities.UserDtoUpdate;
+import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.helpers.Search;
 import com.simple.restapi.helpers.SearchOnly;
 import com.simple.restapi.model.entities.User;
@@ -14,11 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -64,6 +69,40 @@ public class UserController {
                 response.setData(userService.register(user));
                 return ResponseEntity.ok(response);
             }
+        }
+    }
+
+    @PutMapping("/register/update")
+    public ResponseEntity<?> updateUserProperties(@Valid @RequestBody UserDtoFull userDtoFull, Errors errors){
+        ResponseMessage<User> response = new ResponseMessage<>();
+        userDtoFull.setAccessLevel(userDtoFull.getAccessLevel().toUpperCase());
+        User user = modelMapper.map(userDtoFull, User.class);
+
+
+        if (errors.hasErrors()){
+            for (ObjectError error : errors.getAllErrors()){
+                response.getMessages().add(error.getDefaultMessage());
+            }
+            response.setStatus(false);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } else {
+            User tempUser = null;
+            try {
+                tempUser = userService.findById(user.getId()).get();
+            } catch (NoSuchElementException e){
+                return new Messages().idNotFound(user.getId(), response);
+            } catch (Exception e){
+                e.printStackTrace();
+                return new Messages().uknownError();
+            }
+            if (tempUser != null) {
+                user.setPassword(userDtoFull.getPassword());
+            }
+
+            response.setStatus(true);
+            response.getMessages().add("Saved success!");
+            response.setData(userService.register(user));
+            return ResponseEntity.ok(response);
         }
     }
 

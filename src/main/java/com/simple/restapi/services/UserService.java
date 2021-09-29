@@ -2,6 +2,7 @@ package com.simple.restapi.services;
 
 import com.simple.restapi.model.dao.UserDao;
 import com.simple.restapi.model.entities.User;
+import com.simple.restapi.model.entities.utils.AccessLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,5 +42,12 @@ public class UserService implements UserDetailsService {
 
     public Iterable<?> findAll() {
         return userDao.findAll();
+    }
+
+    public Optional<User> findById(Long id) {
+        return userDao.findById(id);
+    }
+    public boolean existsByEmail(String email) {
+        return userDao.existsByEmail(email);
     }
 }

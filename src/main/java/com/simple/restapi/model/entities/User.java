@@ -2,6 +2,7 @@ package com.simple.restapi.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simple.restapi.model.entities.utils.AccessLevel;
+import com.simple.restapi.model.entities.utils.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

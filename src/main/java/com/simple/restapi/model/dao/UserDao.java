@@ -12,4 +12,6 @@ public interface UserDao extends PagingAndSortingRepository<User, Long> {
     Optional<User> findByEmail(String email);
 
     Page<User> findByEmailContains(String email, Pageable pageable);
+
+    boolean existsByEmail(String email);
 }
