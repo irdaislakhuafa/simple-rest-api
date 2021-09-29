@@ -107,7 +107,7 @@ public class CategoyController {
     }
 
     @PostMapping("/saveall")
-    public ResponseEntity<?> saveAll(@RequestBody List<Category> categoryList){
+    public ResponseEntity<?> saveAll(@RequestBody List<Category> categoryList) {
         ResponseMessage<Iterable<Category>> response = new ResponseMessage<>();
         response.setStatus(true);
         response.setData(categoryService.saveAll(categoryList));
@@ -115,11 +115,11 @@ public class CategoyController {
     }
 
     @PutMapping
-    public ResponseEntity<?> update(@Valid @RequestBody CategoryDtoFull categoryDtoFull, Errors errors){
+    public ResponseEntity<?> update(@Valid @RequestBody CategoryDtoFull categoryDtoFull, Errors errors) {
         ResponseMessage<Category> response = new ResponseMessage<>();
 
-        if (errors.hasErrors()){
-            for (ObjectError error : errors.getAllErrors()){
+        if (errors.hasErrors()) {
+            for (ObjectError error : errors.getAllErrors()) {
                 response.getMessages().add(error.getDefaultMessage());
             }
             response.setStatus(false);
@@ -127,6 +127,17 @@ public class CategoyController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } else {
             Category category = modelMapper.map(categoryDtoFull, Category.class);
+            Category tempCategory = null;
+            try {
+                tempCategory = categoryService.findById(categoryDtoFull.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (tempCategory != null) {
+                category.setCreatedBy(tempCategory.getCreatedBy());
+                category.setCreatedDate(tempCategory.getCreatedDate());
+            }
             response.setStatus(true);
             response.setData(categoryService.save(category));
             return ResponseEntity.ok(response);

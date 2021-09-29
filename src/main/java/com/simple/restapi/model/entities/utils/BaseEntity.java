@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 @MappedSuperclass
-@EntityListeners(value = AuditingEntityListener.class)
+@EntityListeners(value = AuditingEntityListener.class) // when subclass is modified this class will execute
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
