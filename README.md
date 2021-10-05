@@ -1,4 +1,5 @@
 How to run it?
+
 	* First
 	- you have to install maven (https://maven.apache.org/install.html)
 	- install MySQL for DBMS (use xampp for easier)
@@ -10,6 +11,7 @@ How to run it?
 	- make sure you have installed maven and set the path so that it can be used in the terminal
 	
 if you have done all the requirements above correctly, type the command below to run it.
+
 	* open your terminal
 	- cd /path/to/simple-rest-api
 	- mvn spring-boot:run
