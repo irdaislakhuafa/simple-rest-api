@@ -1,5 +1,9 @@
 package com.simple.restapi.controllers;
 
+import java.util.NoSuchElementException;
+
+import javax.validation.Valid;
+
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.ProductDto;
 import com.simple.restapi.dto.entities.ProductDtoFull;
@@ -10,6 +14,7 @@ import com.simple.restapi.model.entities.Category;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.ProductService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,10 +22,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.NoSuchElementException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/restapi/products")
@@ -84,12 +93,12 @@ public class ProductController {
             Product tempProduct = null;
             try {
                 tempProduct = productService.findById(productDtoFull.getId());
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 return new Messages().idNotFound(productDtoFull.getId(), response);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (tempProduct != null){
+            if (tempProduct != null) {
                 product.setCreatedBy(tempProduct.getCreatedBy());
                 product.setCreatedDate(tempProduct.getCreatedDate());
             }
@@ -115,7 +124,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors, @PathVariable("id") Long productId) {
+    public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors,
+            @PathVariable("id") Long productId) {
         ResponseMessage<Supplier> response = new ResponseMessage<>();
         Messages messages = new Messages();
 
@@ -149,9 +159,9 @@ public class ProductController {
             productService.setCategory(category, productId);
         } catch (NoSuchElementException e) {
             return messages.idNotFound("Product", productId);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return messages.idNotFound("Category", category.getId());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return messages.uknownError();
         }

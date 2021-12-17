@@ -1,13 +1,14 @@
 package com.simple.restapi.model.dao;
 
-import com.simple.restapi.model.entities.Category;
-import com.simple.restapi.model.entities.Product;
-import com.simple.restapi.model.entities.Supplier;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
 import javax.websocket.server.PathParam;
-import java.util.List;
+
+import com.simple.restapi.model.entities.Product;
+import com.simple.restapi.model.entities.Supplier;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
 public interface ProductDao extends CrudRepository<Product, Long> {
     List<Product> findByNameContains(String name);

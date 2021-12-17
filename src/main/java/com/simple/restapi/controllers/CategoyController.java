@@ -1,5 +1,10 @@
 package com.simple.restapi.controllers;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.validation.Valid;
+
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.CategoryDto;
 import com.simple.restapi.dto.entities.CategoryDtoFull;
@@ -7,6 +12,7 @@ import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.helpers.Search;
 import com.simple.restapi.model.entities.Category;
 import com.simple.restapi.services.CategoryService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -16,11 +22,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.NoSuchElementException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/restapi/categories")
@@ -73,7 +82,6 @@ public class CategoyController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeById(@PathVariable("id") Long id) {
-        Category category;
         Messages messages = new Messages();
 
         try {
@@ -94,14 +102,12 @@ public class CategoyController {
             pageable = PageRequest.of(
                     search.getRequestData().getPage(),
                     search.getRequestData().getSize(),
-                    Sort.by(search.getSort().getSortBy()).descending()
-            );
+                    Sort.by(search.getSort().getSortBy()).descending());
         } else {
             pageable = PageRequest.of(
                     search.getRequestData().getPage(),
                     search.getRequestData().getSize(),
-                    Sort.by(search.getSort().getSortBy()).ascending()
-            );
+                    Sort.by(search.getSort().getSortBy()).ascending());
         }
         return ResponseEntity.ok(categoryService.findByNameContains(search.getKeyword(), pageable));
     }
@@ -130,7 +136,7 @@ public class CategoyController {
             Category tempCategory = null;
             try {
                 tempCategory = categoryService.findById(categoryDtoFull.getId());
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 return new Messages().idNotFound(categoryDtoFull.getId(), response);
             } catch (Exception e) {
                 e.printStackTrace();
