@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +41,7 @@ public class ProductController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Async
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody ProductDto productDto, Errors errors) {
         ResponseMessage<Product> response = new ResponseMessage<>();
@@ -59,11 +61,13 @@ public class ProductController {
         }
     }
 
+    @Async
     @GetMapping
     public Iterable<Product> findAll() {
         return productService.findAll();
     }
 
+    @Async
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         Product product;
@@ -77,6 +81,7 @@ public class ProductController {
         return ResponseEntity.ok(product);
     }
 
+    @Async
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody ProductDtoFull productDtoFull, Errors errors) {
         ResponseMessage<Product> response = new ResponseMessage<>();
@@ -109,6 +114,7 @@ public class ProductController {
         }
     }
 
+    @Async
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeById(@PathVariable("id") Long id) {
         Product product;
@@ -123,6 +129,7 @@ public class ProductController {
         return new Messages().success();
     }
 
+    @Async
     @PutMapping("/{id}")
     public ResponseEntity<?> addSupplier(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors,
             @PathVariable("id") Long productId) {
@@ -152,6 +159,7 @@ public class ProductController {
         }
     }
 
+    @Async
     @PutMapping("/set/category/{productId}")
     public ResponseEntity<?> setCategory(@RequestBody Category category, @PathVariable Long productId) {
         Messages messages = new Messages();
@@ -169,16 +177,19 @@ public class ProductController {
         return ResponseEntity.ok(messages);
     }
 
+    @Async
     @PostMapping("/search/name")
     public ResponseEntity<?> findByName(@RequestBody Search search) {
         return productService.findProductsByName(search.getKeyword());
     }
 
+    @Async
     @PostMapping("/search/name/like")
     public ResponseEntity<?> findByNameLike(@RequestBody Search search) {
         return productService.findProductsByNameLike(search.getKeyword());
     }
 
+    @Async
     @GetMapping("/search/category/{id}")
     public ResponseEntity<?> findByCategoryId(@PathVariable("id") Long id) {
         ResponseEntity<?> response;
@@ -193,6 +204,7 @@ public class ProductController {
         return response;
     }
 
+    @Async
     @GetMapping("/search/supplier/{id}")
     public ResponseEntity<?> findBySupplier(@PathVariable("id") Long id) {
         ResponseEntity<?> response = productService.findProductsBySupplier(id);

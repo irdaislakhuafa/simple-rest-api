@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,6 +41,7 @@ public class CategoyController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Async
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody CategoryDto categoryDto, Errors errors) {
         ResponseMessage<Category> response = new ResponseMessage<>();
@@ -60,11 +62,13 @@ public class CategoyController {
         }
     }
 
+    @Async
     @GetMapping
     public Iterable<?> findAll() {
         return categoryService.findAll();
     }
 
+    @Async
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         Category category;
@@ -80,6 +84,7 @@ public class CategoyController {
         return ResponseEntity.ok(category);
     }
 
+    @Async
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeById(@PathVariable("id") Long id) {
         Messages messages = new Messages();
@@ -94,6 +99,7 @@ public class CategoyController {
         return ResponseEntity.ok("success");
     }
 
+    @Async
     @PostMapping("/search/with_paging")
     public ResponseEntity<?> findByNameContains(@RequestBody Search search) {
         Pageable pageable;
@@ -112,6 +118,7 @@ public class CategoyController {
         return ResponseEntity.ok(categoryService.findByNameContains(search.getKeyword(), pageable));
     }
 
+    @Async
     @PostMapping("/saveall")
     public ResponseEntity<?> saveAll(@RequestBody List<Category> categoryList) {
         ResponseMessage<Iterable<Category>> response = new ResponseMessage<>();
@@ -120,6 +127,7 @@ public class CategoyController {
         return ResponseEntity.ok(response);
     }
 
+    @Async
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody CategoryDtoFull categoryDtoFull, Errors errors) {
         ResponseMessage<Category> response = new ResponseMessage<>();

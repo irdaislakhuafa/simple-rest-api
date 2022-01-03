@@ -1,5 +1,9 @@
 package com.simple.restapi.controllers;
 
+import java.util.NoSuchElementException;
+
+import javax.validation.Valid;
+
 import com.simple.restapi.dto.ResponseMessage;
 import com.simple.restapi.dto.entities.SupplierDto;
 import com.simple.restapi.dto.entities.SupplierDtoFull;
@@ -7,16 +11,22 @@ import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.helpers.Search;
 import com.simple.restapi.model.entities.Supplier;
 import com.simple.restapi.services.SupplierService;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.NoSuchElementException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/restapi/suppliers")
@@ -27,11 +37,13 @@ public class SupplierController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Async
     @GetMapping
     public Iterable<Supplier> findAll() {
         return supplierService.findAll();
     }
 
+    @Async
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody SupplierDto supplierDto, Errors errors) {
         ResponseMessage<Supplier> response = new ResponseMessage<>();
@@ -52,6 +64,7 @@ public class SupplierController {
         }
     }
 
+    @Async
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
         Supplier supplier;
@@ -70,6 +83,7 @@ public class SupplierController {
         }
     }
 
+    @Async
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody SupplierDtoFull supplierDtoFull, Errors errors) {
         ResponseMessage<Supplier> response = new ResponseMessage<>();
@@ -86,12 +100,12 @@ public class SupplierController {
             Supplier tempSupplier = null;
             try {
                 tempSupplier = supplierService.findById(supplierDtoFull.getId());
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 return new Messages().idNotFound(supplierDtoFull.getId(), response);
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (tempSupplier != null){
+            if (tempSupplier != null) {
                 supplier.setCreatedBy(tempSupplier.getCreatedBy());
                 supplier.setCreatedDate(tempSupplier.getCreatedDate());
             }
@@ -101,6 +115,7 @@ public class SupplierController {
         }
     }
 
+    @Async
     @DeleteMapping("/{id}")
     public ResponseEntity<?> removeById(@PathVariable("id") Long id) {
         Messages messages = new Messages();
@@ -114,19 +129,25 @@ public class SupplierController {
         return ResponseEntity.ok("success");
     }
 
+    @Async
     @PostMapping("/search/name_contains")
     public ResponseEntity<?> findByName(@RequestBody Search search) {
         return ResponseEntity.ok(supplierService.findByName(search.getKeyword(), search.getSort().getSortOrder()));
     }
 
+    @Async
     @PostMapping("/search/email")
     public ResponseEntity<?> findByEmail(@RequestBody Search search) {
         return ResponseEntity.ok(supplierService.findByEmail(search.getKeyword()));
     }
+
+    @Async
     @PostMapping("/search/name_starting")
     public ResponseEntity<?> findByNameStartsWith(@RequestBody Search search) {
         return ResponseEntity.ok(supplierService.findByNameStartsWith(search.getKeyword()));
     }
+
+    @Async
     @PostMapping("/search/name_or_email")
     public ResponseEntity<?> findByNameOrEmail(@RequestBody Search search) {
         return ResponseEntity.ok(supplierService.findByNameOrEmail(search.getKeyword(), search.getSecondKeyword()));

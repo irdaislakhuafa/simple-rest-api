@@ -1,15 +1,17 @@
 package com.simple.restapi.services;
 
+import java.util.List;
+
 import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.model.dao.ProductDao;
 import com.simple.restapi.model.entities.Category;
 import com.simple.restapi.model.entities.Product;
 import com.simple.restapi.model.entities.Supplier;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductService {
@@ -22,32 +24,39 @@ public class ProductService {
     @Autowired
     private SupplierService supplierService;
 
+    @Async
     public Product findById(Long id) {
         return productDao.findById(id).get();
     }
 
+    @Async
     public Product save(Product product) {
         return productDao.save(product);
     }
 
+    @Async
     public Iterable<Product> findAll() {
         return productDao.findAll();
     }
 
+    @Async
     public void removeById(Long id) {
         productDao.deleteById(id);
     }
 
+    @Async
     public List<Product> findByNameContains(String name) {
         return productDao.findByNameContains(name);
     }
 
+    @Async
     public void addSupplier(Supplier supplier, Long productId) {
         Product product = findById(productId);
         product.getSuppliers().add(supplier);
         save(product);
     }
 
+    @Async
     public ResponseEntity<?> findProductsByName(String name) {
         List<Product> products = productDao.findProductsByName(name);
 
@@ -58,6 +67,7 @@ public class ProductService {
         }
     }
 
+    @Async
     public ResponseEntity<?> findProductsByNameLike(String name) {
         List<Product> products = productDao.findProductsByNameLike("%" + name + "%");
 
@@ -68,6 +78,7 @@ public class ProductService {
         }
     }
 
+    @Async
     public ResponseEntity<?> findProductsByCategory(Long categoryId) throws Exception {
         Category category = categoryService.findById(categoryId);
 
@@ -78,6 +89,7 @@ public class ProductService {
         }
     }
 
+    @Async
     public ResponseEntity<?> findProductsBySupplier(Long supplierId) {
         Supplier supplier = supplierService.findById(supplierId);
 
@@ -88,7 +100,8 @@ public class ProductService {
         return ResponseEntity.ok(products);
     }
 
-    public void setCategory(Category category, Long productId) throws Exception{
+    @Async
+    public void setCategory(Category category, Long productId) throws Exception {
         Product product = findById(productId);
         product.setCategory(category);
         save(product);

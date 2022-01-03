@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +41,13 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Async
     @GetMapping
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(userService.findAll());
     }
 
+    @Async
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto, Errors errors) {
         ResponseMessage<User> response = new ResponseMessage<>();
@@ -76,6 +79,7 @@ public class UserController {
         }
     }
 
+    @Async
     @PutMapping("/register/update")
     public ResponseEntity<?> updateUserProperties(@Valid @RequestBody UserDtoFull userDtoFull, Errors errors) {
         ResponseMessage<User> response = new ResponseMessage<>();
@@ -115,6 +119,7 @@ public class UserController {
         }
     }
 
+    @Async
     @PostMapping("/search/email")
     public ResponseEntity<?> findByEmail(@RequestBody SearchOnly searchOnly) {
         Optional<User> optionalUser = userService.findByEmail(searchOnly.getKeyword());
@@ -126,6 +131,7 @@ public class UserController {
         }
     }
 
+    @Async
     @PostMapping("/search/email_contains")
     public ResponseEntity<?> findByEmailContains(@RequestBody Search search) {
         Pageable pageable;
