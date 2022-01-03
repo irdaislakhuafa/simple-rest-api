@@ -11,3 +11,17 @@
     text-align: center;
     padding-top: 30px;
 }
+
+
+/* for error label */
+
+.error-label {
+    padding-top: 20px;
+    font-size: 250px;
+}
+
+.error-desc {
+    font-size: 80px;
+    margin: auto auto auto auto;
+    text-align: center;
+}
