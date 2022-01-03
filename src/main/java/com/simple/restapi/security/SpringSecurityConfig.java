@@ -16,9 +16,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override // allow all people access /restapi/users/register without security
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers("/restapi/users/register").permitAll()
-                .anyRequest().fullyAuthenticated().and().httpBasic();
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(
+                        // disable security in register
+                        "/restapi/users/register",
+                        // disable security in /webjars/** to enable CSS/JS/Bootstrap
+                        "/webjars/**", "/style.css",
+                        // enable /images
+                        "/images/**")
+                .permitAll()
+                .anyRequest().fullyAuthenticated()
+                .and().formLogin().loginPage("/user/login").permitAll()
+        // .and().httpBasic();
+        ;
     }
 
     @Override

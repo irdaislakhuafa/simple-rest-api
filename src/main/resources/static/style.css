@@ -1,0 +1,13 @@
+.login {
+    margin-top: 10vh;
+    background-color: #aeffaa;
+}
+
+.login img {
+    height: auto;
+    width: 15%;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    padding-top: 30px;
+}

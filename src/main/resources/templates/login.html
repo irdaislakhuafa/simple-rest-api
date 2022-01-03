@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- this is head -->
+    <div th:replace="fragments/components::head"></div>
+</head>
+
+<body>
+
+    <!-- start content -->
+    <div class="container col-sm-3">
+
+        <!-- start card -->
+        <div class="card login">
+            <img class="card-img-top" th:src="@{/images/spring-boot.png}" alt="">
+            <label for="" class="card-title text-center pt-3 fs-4" th:text="${loginTitle}"></label>
+            <div class="card-body">
+
+                <!-- start form -->
+                <form th:action="@{/user/login}" method="post">
+
+                    <!-- username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Ex. irdhaislakhuafa@gmail.com">
+                    </div>
+
+                    <!-- password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Your password here!">
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="mb-3">
+                        <a href="#" class="btn btn-primary">Register</a>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+                <!-- end form -->
+            </div>
+        </div>
+        <!-- end card -->
+
+    </div>
+    <!-- end content -->
+
+    <!-- import javascript -->
+    <div th:replace="fragments/components::scripts"></div>
+</body>
+
+</html>
