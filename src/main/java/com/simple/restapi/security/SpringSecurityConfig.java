@@ -16,8 +16,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override // allow all people access /restapi/users/register without security
     protected void configure(HttpSecurity http) throws Exception {
+        // start config
         http
-                .csrf().disable()
+                // .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(
                         // disable security in register
@@ -29,12 +30,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         // disable security in register page
                         "/user/register")
                 .permitAll()
+
                 .antMatchers(
-                        "/restapi/users")
-                .hasAnyRole()
+                        "/restapi/users",
+                        "/restapi/users/register/**")
+                .hasAnyAuthority("ADMIN")
+
                 .anyRequest().fullyAuthenticated()
                 .and().formLogin().loginPage("/user/login").permitAll()
-        // .and().httpBasic();
+        // end config;
         ;
     }
 

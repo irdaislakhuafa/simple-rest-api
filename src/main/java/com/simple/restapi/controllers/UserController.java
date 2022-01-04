@@ -11,6 +11,7 @@ import com.simple.restapi.dto.entities.UserDtoFull;
 import com.simple.restapi.helpers.Messages;
 import com.simple.restapi.helpers.Search;
 import com.simple.restapi.helpers.SearchOnly;
+import com.simple.restapi.helpers.UserInfo;
 import com.simple.restapi.model.entities.User;
 import com.simple.restapi.services.UserService;
 
@@ -41,10 +42,20 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private UserInfo userInfo;
+
     @Async
     @GetMapping
     public ResponseEntity<?> findAll() {
+        System.out.println(userInfo.getCurrentUser());
         return ResponseEntity.ok(userService.findAll());
+    }
+
+    @Async
+    @GetMapping("/current")
+    public ResponseEntity<?> currentUser() {
+        return ResponseEntity.ok(userInfo.getCurrentUser());
     }
 
     @Async
@@ -122,12 +133,16 @@ public class UserController {
     @Async
     @PostMapping("/search/email")
     public ResponseEntity<?> findByEmail(@RequestBody SearchOnly searchOnly) {
-        Optional<User> optionalUser = userService.findByEmail(searchOnly.getKeyword());
+        try {
+            Optional<User> optionalUser = userService.findByEmail(searchOnly.getKeyword());
 
-        if (optionalUser.isPresent()) {
-            return ResponseEntity.ok(optionalUser.get());
-        } else {
-            return new ResponseEntity<>(optionalUser.get(), HttpStatus.NOT_FOUND);
+            if (optionalUser.isPresent()) {
+                return ResponseEntity.ok(optionalUser.get());
+            } else {
+                return new ResponseEntity<>(optionalUser.get(), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
