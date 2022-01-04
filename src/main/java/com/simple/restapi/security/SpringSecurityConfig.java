@@ -25,8 +25,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         // disable security in /webjars/** to enable CSS/JS/Bootstrap
                         "/webjars/**", "/style.css",
                         // enable /images
-                        "/images/**")
+                        "/images/**",
+                        // disable security in register page
+                        "/user/register")
                 .permitAll()
+                .antMatchers(
+                        "/restapi/users")
+                .hasAnyRole()
                 .anyRequest().fullyAuthenticated()
                 .and().formLogin().loginPage("/user/login").permitAll()
         // .and().httpBasic();

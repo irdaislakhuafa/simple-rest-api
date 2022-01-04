@@ -13,7 +13,7 @@
 
         <!-- start card -->
         <div class="card login">
-            <img class="card-img-top" th:src="@{/images/spring-boot.png}" alt="">
+            <div th:replace="fragments/img::spring-logo-card"></div>
             <label for="" class="card-title text-center pt-3 fs-4" th:text="${loginTitle}"></label>
             <div class="card-body">
 
@@ -30,12 +30,17 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" name="password" id="password" placeholder="Your password here!">
+
+                        <!-- thymeleaf if else -->
+                        <small th:if="${param.error}" class="form-text  text-danger">Username or password
+                            invalid!</small>
+                        <small th:if="${param.logout}">You has been logout!</small>
                     </div>
 
                     <!-- buttons -->
                     <div class="mb-3">
-                        <a href="#" class="btn btn-primary">Register</a>
-                        <button type="submit" class="btn btn-success">Submit</button>
+                        <a th:href="@{/user/register}" class="btn btn-primary st-case">Register first</a>
+                        <button type="submit" class="btn btn-success">Login</button>
                     </div>
                 </form>
                 <!-- end form -->

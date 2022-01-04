@@ -27,7 +27,6 @@ public class SwaggerConfiguration {
                                 .apis(RequestHandlerSelectors.basePackage("com.simple.restapi.controller"))
                                 .paths(PathSelectors.any())
                                 .build()
-                                .pathMapping("/docs")
                                 .apiInfo(new ApiInfo(
                                                 "My Simple Rest API Documentation",
                                                 "This is description of Simple Rest API",

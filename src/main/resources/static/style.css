@@ -25,3 +25,11 @@
     margin: auto auto auto auto;
     text-align: center;
 }
+
+
+/* text transform */
+
+.sintence-case,
+.st-case {
+    text-transform: capitalize;
+}

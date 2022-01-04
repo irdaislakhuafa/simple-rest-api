@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="fragments/components::head"></div>
+</head>
+
+<body>
+
+    <div class="container col-sm-4">
+        <div class="card login">
+            <div th:replace="fragments/img::spring-logo-card"></div>
+            <h4 class="card-title pt-1 text-center" th:text="${title}"></h4>
+
+            <div class="card-body">
+                <!-- start form -->
+                <form th:object="${userDto}" th:action="@{register}" method="post">
+
+                    <!-- user full name -->
+                    <div class="mb-3">
+                        <label for="userFullName" class="form-label st-case">name</label>
+                        <input th:field="*{userFullName}" type="text" name="userFullName" id="userFullName" class="form-control" placeholder="Ex. Irda Islakhu Afa" required>
+                    </div>
+
+                    <!-- email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label st-case">Email</label>
+                        <input th:field="*{email}" type="email" class="form-control" name="email" id="email" placeholder="Ex. irdhaislakhuafa@gmail.com" required>
+                    </div>
+
+                    <!-- password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label st-case">Password</label>
+                        <input th:field="*{password}" type="password" class="form-control" name="password" id="password" placeholder="Ex. irdaislakhuafa" required>
+                    </div>
+
+                    <!-- access level -->
+                    <div class="mb-3">
+                        <label for="accessLevel" class="form-label">Acsess Level</label>
+                        <input th:field="*{accessLevel}" readonly required type="text" class="form-control" name="accessLevel" id="accessLevel">
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="mb-3">
+                        <a class="btn btn-danger" th:href="@{/user/login}" role="button">Back to Login</a>
+                        <button type="submit" class="btn btn-success">Register</button>
+                    </div>
+                </form>
+                <!-- end form -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- import scripts -->
+    <div th:replace="fragments/components::scripts"></div>
+</body>
+
+</html>
