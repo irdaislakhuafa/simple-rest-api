@@ -31,6 +31,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/register")
                 .permitAll()
 
+                // only admin can access
                 .antMatchers(
                         "/restapi/users",
                         "/restapi/users/register/**")
@@ -38,13 +39,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .anyRequest().fullyAuthenticated()
                 .and().formLogin().loginPage("/user/login").permitAll()
-        // .and()
-        // .logout().logoutUrl("/user/logout").permitAll().logoutSuccessUrl("/user/login")
-        // .invalidateHttpSession(true)
-        // .deleteCookies("JSESSIONID")
-        // .permitAll()
-
-        // .logoutUrl("/logout").logoutSuccessUrl("/user/login").deleteCookies("JSESSIONID").permitAll()
         // end config;
         ;
     }
